@@ -47,8 +47,8 @@ const RestaurantSchema = new mongoose.Schema({
     toObject:{virtuals:true}
 });
 
-RestaurantSchema.virtual('appointments',{
-    ref: 'Appointment',
+RestaurantSchema.virtual('reservations',{
+    ref: 'Reservation',
     localField: '_id',
     foreignField:'restaurant',
     justOne:false

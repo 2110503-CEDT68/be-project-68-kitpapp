@@ -1,5 +1,5 @@
 const Restaurant = require('../models/Restaurant.js');
-const Appointment = require('../models/Appointment.js');
+const Reservation = require('../models/Reservation.js');
 exports.getRestaurants = async (req, res, next) => {
     const reqQuery={...req.query};
 
@@ -19,7 +19,7 @@ exports.getRestaurants = async (req, res, next) => {
         }
     });
     //console.log('Final Correct Query:', queryObj);
-    let query=Restaurant.find(queryObj).populate('appointments');
+    let query=Restaurant.find(queryObj).populate('reservations');
     //select
     if (req.query.select) {
         const fields = req.query.select.split(',').join(' ');
@@ -69,7 +69,8 @@ exports.getRestaurants = async (req, res, next) => {
 
     } catch (err) {
         res.status(400).json({
-            success: false
+            success: false,
+            msg : err.message
         });
     }
 };
@@ -147,7 +148,7 @@ exports.deleteRestaurant = async (req, res, next) => {
         message: "Restaurant not found"
       });
     }
-    await Appointment.deleteMany({ restaurant: req.params.id });
+    await Reservation.deleteMany({ restaurant: req.params.id });
     await Restaurant.deleteOne({ _id: req.params.id });
 
     res.status(200).json({
